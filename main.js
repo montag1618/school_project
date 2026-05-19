@@ -317,8 +317,6 @@ ctx.fillStyle = "black";
 ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 
-//renderMiniMap(testMap);
-
 Engine.currentMap.bspTree.traverseBspTree(Engine.currentCamera, Engine.renderSeg);
 
 
