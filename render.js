@@ -19,6 +19,8 @@ class Camera {
 
 let Render = {
 
+    engine: null, 
+
     fillScreen(color) {
         ctx.fillStyle = color;
         ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -27,9 +29,9 @@ let Render = {
     renderMiniMap() {
             ctx.strokeStyle = "white";
             ctx.beginPath();
-            for (let l = 0; l < Engine.currentMap.linedefs.length; l++) {
-                let start = Engine.currentMap.linedefs[l].startVertex;
-                let end = Engine.currentMap.linedefs[l].endVertex;
+            for (let l = 0; l < engine.currentMap.linedefs.length; l++) {
+                let start = engine.currentMap.linedefs[l].startVertex;
+                let end = engine.currentMap.linedefs[l].endVertex;
                 ctx.moveTo(
                     start.x + canvasShiftX,
                     canvasShiftY - start.y
@@ -51,20 +53,20 @@ let Render = {
     
             ctx.strokeStyle = "green";
             ctx.beginPath();
-            ctx.arc(Engine.currentCamera.x + canvasShiftX, canvasShiftY - Engine.currentCamera.y, 10, 0, 6.2830);
-            ctx.moveTo(Engine.currentCamera.x + canvasShiftX, canvasShiftY - Engine.currentCamera.y);
-            ctx.lineTo(Engine.currentCamera.x + Math.cos(this.currentCamera.direction)*15 + canvasShiftX, canvasShiftY - Engine.currentCamera.y - Math.sin(Engine.currentCamera.direction)*15);
+            ctx.arc(engine.currentCamera.x + canvasShiftX, canvasShiftY - engine.currentCamera.y, 10, 0, 6.2830);
+            ctx.moveTo(engine.currentCamera.x + canvasShiftX, canvasShiftY - engine.currentCamera.y);
+            ctx.lineTo(engine.currentCamera.x + Math.cos(this.currentCamera.direction)*15 + canvasShiftX, canvasShiftY - engine.currentCamera.y - Math.sin(engine.currentCamera.direction)*15);
             ctx.stroke();
     },
 
     renderSeg(seg) {
-        let sx = seg.startVertex.x - Engine.currentCamera.x;
-        let sy = seg.startVertex.y - Engine.currentCamera.y;
-        let ex = seg.endVertex.x - Engine.currentCamera.x;
-        let ey = seg.endVertex.y - Engine.currentCamera.y;
+        let sx = seg.startVertex.x - engine.currentCamera.x;
+        let sy = seg.startVertex.y - engine.currentCamera.y;
+        let ex = seg.endVertex.x - engine.currentCamera.x;
+        let ey = seg.endVertex.y - engine.currentCamera.y;
 
-        let sin = Math.sin(-Engine.currentCamera.direction);
-        let cos = Math.cos(-Engine.currentCamera.direction);
+        let sin = Math.sin(-engine.currentCamera.direction);
+        let cos = Math.cos(-engine.currentCamera.direction);
 
         ctx.strokeStyle = seg.texture;
         ctx.beginPath();

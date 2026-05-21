@@ -49,6 +49,8 @@ let Engine = {
 
 };
 
+Render.engine = Engine;
+
 
 
 //main loop exit
