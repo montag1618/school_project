@@ -1,7 +1,7 @@
 import {BspNode} from './bsp.js';
 import {upPressed, downPressed, leftPressed, rightPressed} from './input.js';
 import {Vertex, Sidedef, Linedef, Seg, Map} from './map.js';
-import {CANVAS_WIDTH, CANVAS_HEIGHT, canvasShiftX, canvasShiftY, canvas, ctx, t} from './render.js';
+import {CANVAS_WIDTH, CANVAS_HEIGHT, canvasShiftX, canvasShiftY, canvas, ctx, t, Camera} from './render.js';
 
 
 let v
