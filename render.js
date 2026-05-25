@@ -8,12 +8,14 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 const t = Math.trunc
+const crossPr = (x1, y1, x2, y2) => x1 * y2 - y1 * x2;
 
 class Camera {
     constructor(x, y, dir) {
         this.x = x;
         this.y = y;
         this.direction = dir;
+        this.fov = 1.57;
     };
 };
 
@@ -68,10 +70,27 @@ let Render = {
         let sin = Math.sin(-engine.currentCamera.direction);
         let cos = Math.cos(-engine.currentCamera.direction);
 
+        let ubogiiKostil = t(sx * cos) - t(sy * sin);
+        sy = t(sy * cos) + t(sx * sin);
+        sx = ubogiiKostil;
+        ubogiiKostil = t(ex * cos) - t(ey * sin);
+        ey = t(ey * cos) + t(ex * sin);
+        ex = ubogiiKostil;
+        
+        let fovx1 = Math.cos(this.engine.currentCamera.fov/2)-this.engine.currentCamera.x;
+        let fovy1 = Math.sin(this.engine.currentCamera.fov/2)-this.engine.currentCamera.y;
+        let fovx2 = Math.cos(-this.engine.currentCamera.fov/2)-this.engine.currentCamera.x;
+        let fovy2 = Math.sin(-this.engine.currentCamera.fov/2)-this.engine.currentCamera.y;
+        let svecx = sx-this.engine.currentCamera.x;
+        let svecy = sy-this.engine.currentCamera.y;
+        let evecx = ex-this.engine.currentCamera.x;
+        let evecy = ey-this.engine.currentCamera.y;
+        if (crossPr(fovx1, fovy1, svecx, svecy) > 0 && crossPr(fovx1, fovy1, evecx, evecy) > 0 || crossPr(fovx2, fovy2, svecx, svecy) < 0 && crossPr(fovx2, fovy2, evecx, evecy) < 0) return;
+
         ctx.strokeStyle = seg.texture;
         ctx.beginPath();
-        ctx.moveTo((t(sx * cos) - t(sy * sin)) + canvasShiftX, canvasShiftY - (t(sy * cos) + t(sx * sin)));
-        ctx.lineTo((t(ex * cos) - t(ey * sin)) + canvasShiftX, canvasShiftY - (t(ey * cos) + t(ex * sin)));
+        ctx.moveTo(sx + canvasShiftX, canvasShiftY - sy);
+        ctx.lineTo(ex + canvasShiftX, canvasShiftY - ey);
         ctx.stroke();
     },
 
