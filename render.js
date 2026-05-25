@@ -31,9 +31,9 @@ let Render = {
     renderMiniMap() {
             ctx.strokeStyle = "white";
             ctx.beginPath();
-            for (let l = 0; l < this.engine.currentMap.linedefs.length; l++) {
-                let start = this.engine.currentMap.linedefs[l].startVertex;
-                let end = this.engine.currentMap.linedefs[l].endVertex;
+            for (let l = 0; l < Render.engine.currentMap.linedefs.length; l++) {
+                let start = Render.engine.currentMap.linedefs[l].startVertex;
+                let end = Render.engine.currentMap.linedefs[l].endVertex;
                 ctx.moveTo(
                     start.x + canvasShiftX,
                     canvasShiftY - start.y
@@ -55,20 +55,20 @@ let Render = {
     
             ctx.strokeStyle = "green";
             ctx.beginPath();
-            ctx.arc(this.engine.currentCamera.x + canvasShiftX, canvasShiftY - this.engine.currentCamera.y, 10, 0, 6.2830);
-            ctx.moveTo(this.engine.currentCamera.x + canvasShiftX, canvasShiftY - this.engine.currentCamera.y);
-            ctx.lineTo(this.engine.currentCamera.x + Math.cos(this.engine.currentCamera.direction)*15 + canvasShiftX, canvasShiftY - this.engine.currentCamera.y - Math.sin(this.engine.currentCamera.direction)*15);
+            ctx.arc(Render.engine.currentCamera.x + canvasShiftX, canvasShiftY - Render.engine.currentCamera.y, 10, 0, 6.2830);
+            ctx.moveTo(Render.engine.currentCamera.x + canvasShiftX, canvasShiftY - Render.engine.currentCamera.y);
+            ctx.lineTo(Render.engine.currentCamera.x + Math.cos(Render.engine.currentCamera.direction)*15 + canvasShiftX, canvasShiftY - Render.engine.currentCamera.y - Math.sin(Render.engine.currentCamera.direction)*15);
             ctx.stroke();
     },
 
     renderSeg(seg) {
-        let sx = seg.startVertex.x - this.engine.currentCamera.x;
-        let sy = seg.startVertex.y - this.engine.currentCamera.y;
-        let ex = seg.endVertex.x - this.engine.currentCamera.x;
-        let ey = seg.endVertex.y - this.engine.currentCamera.y;
+        let sx = seg.startVertex.x - Render.engine.currentCamera.x;
+        let sy = seg.startVertex.y - Render.engine.currentCamera.y;
+        let ex = seg.endVertex.x - Render.engine.currentCamera.x;
+        let ey = seg.endVertex.y - Render.engine.currentCamera.y;
 
-        let sin = Math.sin(-this.engine.currentCamera.direction);
-        let cos = Math.cos(-this.engine.currentCamera.direction);
+        let sin = Math.sin(-Render.engine.currentCamera.direction);
+        let cos = Math.cos(-Render.engine.currentCamera.direction);
 
         let ubogiiKostil = t(sx * cos) - t(sy * sin);
         sy = t(sy * cos) + t(sx * sin);
@@ -77,15 +77,11 @@ let Render = {
         ey = t(ey * cos) + t(ex * sin);
         ex = ubogiiKostil;
         
-        let fovx1 = Math.cos(this.engine.currentCamera.fov/2)-this.engine.currentCamera.x;
-        let fovy1 = Math.sin(this.engine.currentCamera.fov/2)-this.engine.currentCamera.y;
-        let fovx2 = Math.cos(-this.engine.currentCamera.fov/2)-this.engine.currentCamera.x;
-        let fovy2 = Math.sin(-this.engine.currentCamera.fov/2)-this.engine.currentCamera.y;
-        let svecx = sx-this.engine.currentCamera.x;
-        let svecy = sy-this.engine.currentCamera.y;
-        let evecx = ex-this.engine.currentCamera.x;
-        let evecy = ey-this.engine.currentCamera.y;
-        if (crossPr(fovx1, fovy1, svecx, svecy) > 0 && crossPr(fovx1, fovy1, evecx, evecy) > 0 || crossPr(fovx2, fovy2, svecx, svecy) < 0 && crossPr(fovx2, fovy2, evecx, evecy) < 0) return;
+        let fovx1 = Math.cos(Render.engine.currentCamera.fov/2);
+        let fovy1 = Math.sin(Render.engine.currentCamera.fov/2);
+        let fovx2 = Math.cos(-Render.engine.currentCamera.fov/2);
+        let fovy2 = Math.sin(-Render.engine.currentCamera.fov/2);
+        if ((crossPr(fovx1, fovy1, sx, sy) > 0 && crossPr(fovx1, fovy1, ex, ey) > 0) || (crossPr(fovx2, fovy2, sx, sy) < 0 && crossPr(fovx2, fovy2, ex, ey)) < 0) return;
 
         ctx.strokeStyle = seg.texture;
         ctx.beginPath();
