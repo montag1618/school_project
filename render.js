@@ -31,9 +31,9 @@ let Render = {
     renderMiniMap() {
             ctx.strokeStyle = "white";
             ctx.beginPath();
-            for (let l = 0; l < engine.currentMap.linedefs.length; l++) {
-                let start = engine.currentMap.linedefs[l].startVertex;
-                let end = engine.currentMap.linedefs[l].endVertex;
+            for (let l = 0; l < this.engine.currentMap.linedefs.length; l++) {
+                let start = this.engine.currentMap.linedefs[l].startVertex;
+                let end = this.engine.currentMap.linedefs[l].endVertex;
                 ctx.moveTo(
                     start.x + canvasShiftX,
                     canvasShiftY - start.y
@@ -55,20 +55,20 @@ let Render = {
     
             ctx.strokeStyle = "green";
             ctx.beginPath();
-            ctx.arc(engine.currentCamera.x + canvasShiftX, canvasShiftY - engine.currentCamera.y, 10, 0, 6.2830);
-            ctx.moveTo(engine.currentCamera.x + canvasShiftX, canvasShiftY - engine.currentCamera.y);
-            ctx.lineTo(engine.currentCamera.x + Math.cos(this.currentCamera.direction)*15 + canvasShiftX, canvasShiftY - engine.currentCamera.y - Math.sin(engine.currentCamera.direction)*15);
+            ctx.arc(this.engine.currentCamera.x + canvasShiftX, canvasShiftY - this.engine.currentCamera.y, 10, 0, 6.2830);
+            ctx.moveTo(this.engine.currentCamera.x + canvasShiftX, canvasShiftY - this.engine.currentCamera.y);
+            ctx.lineTo(this.engine.currentCamera.x + Math.cos(this.engine.currentCamera.direction)*15 + canvasShiftX, canvasShiftY - this.engine.currentCamera.y - Math.sin(this.engine.currentCamera.direction)*15);
             ctx.stroke();
     },
 
     renderSeg(seg) {
-        let sx = seg.startVertex.x - engine.currentCamera.x;
-        let sy = seg.startVertex.y - engine.currentCamera.y;
-        let ex = seg.endVertex.x - engine.currentCamera.x;
-        let ey = seg.endVertex.y - engine.currentCamera.y;
+        let sx = seg.startVertex.x - this.engine.currentCamera.x;
+        let sy = seg.startVertex.y - this.engine.currentCamera.y;
+        let ex = seg.endVertex.x - this.engine.currentCamera.x;
+        let ey = seg.endVertex.y - this.engine.currentCamera.y;
 
-        let sin = Math.sin(-engine.currentCamera.direction);
-        let cos = Math.cos(-engine.currentCamera.direction);
+        let sin = Math.sin(-this.engine.currentCamera.direction);
+        let cos = Math.cos(-this.engine.currentCamera.direction);
 
         let ubogiiKostil = t(sx * cos) - t(sy * sin);
         sy = t(sy * cos) + t(sx * sin);
