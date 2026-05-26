@@ -11,11 +11,16 @@ const t = Math.trunc
 const crossPr = (x1, y1, x2, y2) => x1 * y2 - y1 * x2;
 
 class Camera {
+    setFov(fov) {
+        this.fov = fov;
+        this.d = CANVAS_WIDTH/(Math.tan(this.fov/2)*2);
+    };
+
     constructor(x, y, dir) {
         this.x = x;
         this.y = y;
         this.direction = dir;
-        this.fov = 1.57;
+        this.setFov(1.57);
     };
 };
 
@@ -81,13 +86,51 @@ let Render = {
         let fovy1 = Math.sin(Render.engine.currentCamera.fov/2);
         let fovx2 = Math.cos(-Render.engine.currentCamera.fov/2);
         let fovy2 = Math.sin(-Render.engine.currentCamera.fov/2);
-        if ((crossPr(fovx1, fovy1, sx, sy) > 0 && crossPr(fovx1, fovy1, ex, ey) > 0) || (crossPr(fovx2, fovy2, sx, sy) < 0 && crossPr(fovx2, fovy2, ex, ey)) < 0) return;
+        if ((sx<0 || ex<0) || (crossPr(fovx1, fovy1, sx, sy) > 0 && crossPr(fovx1, fovy1, ex, ey) > 0) || (crossPr(fovx2, fovy2, sx, sy) < 0 && crossPr(fovx2, fovy2, ex, ey)) < 0) return;
+        
+        let r = crossPr(sx, sy, ex-sx, ey-sy)/crossPr(fovx1, fovy1, ex-sx, ey-sy);
+        let u = crossPr(sx, sy, fovx1, fovy1)/crossPr(ex-sx, ey-sy, fovx1, fovy1);
+        /*if (crossPr(fovx1, fovy1, ex-sx, ey-sy) != 0 && 0 <= r <= 1 && 0 <= u <= 1) {
+            if (crossPr(sx, sy, fovx1, fovy1)>0) {
+                sx = fovx1*r;
+                sy = fovy1*r;
+            } else {
+                ex = fovx1*r;
+                ey = fovy1*r;
+            };
+        };
+        r = crossPr(sx, sy, ex-sx, ey-sy)/crossPr(fovx2, fovy2, ex-sx, ey-sy);
+        u = crossPr(sx, sy, fovx2, fovy2)/crossPr(ex-sx, ey-sy, fovx2, fovy2);
+        if ((crossPr(fovx2, fovy2, ex-sx, ey-sy) != 0) && (0 <= r <= 1) && (0 <= u <= 1)) {
+            if (crossPr(sx, sy, fovx2, fovy2)<0) {
+                sx = fovx2*r;
+                sy = fovy2*r;
+            } else {
+                ex = fovx2*r;
+                ey = fovy2*r;
+            };
+        };*/
+        
+        let x1 = -Render.engine.currentCamera.d * sy / sx;
+        let x2 = -Render.engine.currentCamera.d * ey / ex;
+        let h1 = Render.engine.currentCamera.d * 40 / sx;
+        let h2 = Render.engine.currentCamera.d * 40 / ex;
 
+        ctx.strokeStyle = seg.texture;
+        ctx.beginPath();
+        ctx.moveTo(x1 + canvasShiftX, canvasShiftY - h1);
+        ctx.lineTo(x2 + canvasShiftX, canvasShiftY - h2);
+        ctx.lineTo(x2 + canvasShiftX, canvasShiftY + h2);
+        ctx.lineTo(x1 + canvasShiftX, canvasShiftY + h1);
+        ctx.lineTo(x1 + canvasShiftX, canvasShiftY - h1);
+        ctx.fill();
+        ctx.stroke();
+        /*
         ctx.strokeStyle = seg.texture;
         ctx.beginPath();
         ctx.moveTo(sx + canvasShiftX, canvasShiftY - sy);
         ctx.lineTo(ex + canvasShiftX, canvasShiftY - ey);
-        ctx.stroke();
+        ctx.stroke();*/
     },
 
 };

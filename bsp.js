@@ -98,7 +98,7 @@ class BspNode {
     traverseBspTree(p, f) {
 
         let s = this.splitters[0];
-        if (crossPr((s.endVertex.x-s.startVertex.x), (s.endVertex.y-s.startVertex.y), (p.x-s.startVertex.x), (p.y-s.startVertex.y)) < 0) {
+        if (crossPr((s.endVertex.x-s.startVertex.x), (s.endVertex.y-s.startVertex.y), (p.x-s.startVertex.x), (p.y-s.startVertex.y)) > 0) {
 
             if (this.rightNode != null) this.rightNode.traverseBspTree(p, f);
             for (let s of this.splitters) f(s);
